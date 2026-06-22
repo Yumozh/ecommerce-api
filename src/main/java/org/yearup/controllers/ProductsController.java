@@ -5,13 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.yearup.models.Category;
 import org.yearup.models.Product;
 import org.yearup.service.ProductService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("products")
+@RequestMapping("/products")
 @CrossOrigin
 public class ProductsController
 {
@@ -24,12 +25,18 @@ public class ProductsController
 
     @GetMapping("")
     @PreAuthorize("permitAll()")
-    public List<Product> search(@RequestParam(name="cat", required = false) Integer categoryId,
+    public ResponseEntity<List<Product>> search(
+                                @RequestParam(name="cat", required = false) Integer categoryId,
                                 @RequestParam(name="minPrice", required = false) Double minPrice,
                                 @RequestParam(name="maxPrice", required = false) Double maxPrice,
                                 @RequestParam(name="subCategory", required = false) String subCategory)
     {
-        return productService.search(categoryId, minPrice, maxPrice, subCategory);
+        if (categoryId == null && minPrice == null && maxPrice == null && subCategory == null) {
+            return ResponseEntity.ok(productService.getAllProducts());
+        }
+
+        List<Product> filteredProducts = productService.search(categoryId, minPrice, maxPrice, subCategory);
+        return ResponseEntity.ok(filteredProducts);
     }
 
     @GetMapping("{id}")
