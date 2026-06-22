@@ -18,7 +18,7 @@ public class ProductService
 
     public List<Product> getAllProducts(){
         return productRepository.findAll();
-    }
+}
 
     public List<Product> search(Integer categoryId, Double minPrice, Double maxPrice, String subCategory)
     {
@@ -30,7 +30,6 @@ public class ProductService
                        .filter(p -> minPrice == null || p.getPrice() >= minPrice)
                        .filter(p -> maxPrice == null || p.getPrice() <= maxPrice)
                        .filter(p -> subCategory == null || subCategory.equalsIgnoreCase(p.getSubCategory()))
-                       .filter(Product::isFeatured)
                        .toList();
     }
 
