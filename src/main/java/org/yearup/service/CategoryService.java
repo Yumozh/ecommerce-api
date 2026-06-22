@@ -31,20 +31,29 @@ public class CategoryService
         return categoryRepository.findById(categoryId);
     }
 
-    public Category create(Category category)
+    public Category createCategory(Category category)
     {
         // create a new category
-        return null;
+        return categoryRepository.save(category);
     }
 
-    public Category update(int categoryId, Category category)
+    public Optional<Category> updateCategory(int categoryId, Category updatedCategory)
     {
         // update category and return the updated category
-        return null;
+        return categoryRepository.findById(categoryId).map(existing -> {
+            existing.setName(updatedCategory.getName());
+            existing.setDescription(updatedCategory.getDescription());
+            return categoryRepository.save(existing);
+        });
     }
 
-    public void delete(int categoryId)
+    public boolean deleteCategory(int categoryId)
     {
         // delete category
+        if(categoryRepository.existsById(categoryId)){
+            categoryRepository.deleteById(categoryId);
+            return true;
+        }
+        return false;
     }
 }
