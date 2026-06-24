@@ -2,6 +2,7 @@ package org.yearup.models;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -33,11 +34,14 @@ public class Order {
     private String zip;
 
     @Column(name = "shipping_amount")
-    private double shippingAmount;
+    private BigDecimal shippingAmount;
 
+    @OneToMany(mappedBy = "orderId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderLineItem> itemsList;
 
-    public Order(int orderId, int userId, LocalDate date, String address, String city, String state, String zip, double shippingAmount) {
+    public Order(){}
+
+    public Order(int orderId, int userId, LocalDate date, String address, String city, String state, String zip, BigDecimal shippingAmount) {
         this.orderId = orderId;
         this.userId = userId;
         this.date = date;
@@ -104,11 +108,11 @@ public class Order {
         this.zip = zip;
     }
 
-    public double getShippingAmount() {
+    public BigDecimal getShippingAmount() {
         return shippingAmount;
     }
 
-    public void setShippingAmount(double shippingAmount) {
+    public void setShippingAmount(BigDecimal shippingAmount) {
         this.shippingAmount = shippingAmount;
     }
 }
