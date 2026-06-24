@@ -82,4 +82,15 @@ public class ShoppingCartController
         return new ShoppingCart();
     }
 
+    @PutMapping("/products/{productId}")
+     public ShoppingCart updateCartItem(@PathVariable int productId,
+                                        @RequestBody ShoppingCartItem item,
+                                        Principal principal) {
+        String userName = principal.getName();
+        User user = userService.getByUserName(userName);
+        int userId = user.getId();
+
+        return shoppingCartService.updateCartItem(userId, productId, item.getQuantity());
+    }
+
 }
