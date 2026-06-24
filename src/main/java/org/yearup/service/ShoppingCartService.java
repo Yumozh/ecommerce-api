@@ -1,8 +1,11 @@
 package org.yearup.service;
 
 import org.springframework.stereotype.Service;
-import org.yearup.models.ShoppingCart;
+import org.springframework.transaction.annotation.Transactional;
+import org.yearup.models.*;
 import org.yearup.repository.ShoppingCartRepository;
+
+import java.util.List;
 
 @Service
 public class ShoppingCartService
@@ -20,8 +23,50 @@ public class ShoppingCartService
     public ShoppingCart getByUserId(int userId)
     {
         // load the user's cart rows, look up each product, and build the ShoppingCart
-        return null;
+        ShoppingCart shoppingCart = new ShoppingCart();
+        List<CartItem> cartItemList = shoppingCartRepository.findByUserId(userId);
+
+        for(CartItem item : cartItemList){
+            Product product = productService.getById(item.getProductId());
+            ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+            shoppingCartItem.setProduct(product);
+            shoppingCartItem.setQuantity(item.getQuantity());
+            shoppingCart.add(shoppingCartItem);
+        }
+        return shoppingCart;
     }
 
-    // add additional methods here
+//    public void addToCart{}
+    public void addToCart(int userId, int productId){
+        CartItem itemExist = shoppingCartRepository.findByUserIdAndProductId(userId, productId);
+
+        if(itemExist == null){
+            CartItem newItem = new CartItem();
+            newItem.setUserId(userId);
+            newItem.setProductId(productId);
+            newItem.setQuantity(1);
+            shoppingCartRepository.save(newItem);
+        }
+        else
+        {
+            itemExist.setQuantity(itemExist.getQuantity() + 1);
+            shoppingCartRepository.save(itemExist);
+        }
+    }
+    @Transactional
+    public void clearCart(int userId){
+        shoppingCartRepository.deleteByUserId(userId);
+    }
+
+    @Transactional
+    public ShoppingCart updateCartItem(int userId, int productId, int quantity)
+    {
+        CartItem cartItem = shoppingCartRepository.findByUserIdAndProductId(userId, productId);
+
+        if(cartItem != null){
+            cartItem.setQuantity(quantity);
+            shoppingCartRepository.save(cartItem);
+        }
+        return getByUserId(userId);
+    }
 }
