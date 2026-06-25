@@ -21,25 +21,21 @@ public class CategoryService
 
     public List<Category> getAllCategories()
     {
-        // get all categories
         return categoryRepository.findAll();
     }
 
     public Optional<Category> getById(int categoryId)
     {
-        // get category by id
         return categoryRepository.findById(categoryId);
     }
 
     public Category createCategory(Category category)
     {
-        // create a new category
         return categoryRepository.save(category);
     }
 
     public Optional<Category> updateCategory(int categoryId, Category updatedCategory)
     {
-        // update category and return the updated category
         return categoryRepository.findById(categoryId).map(existing -> {
             existing.setName(updatedCategory.getName());
             existing.setDescription(updatedCategory.getDescription());
@@ -49,7 +45,6 @@ public class CategoryService
 
     public boolean deleteCategory(int categoryId)
     {
-        // delete category
         if(categoryRepository.existsById(categoryId)){
             categoryRepository.deleteById(categoryId);
             return true;
