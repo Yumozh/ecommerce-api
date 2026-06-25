@@ -29,6 +29,15 @@ Below is a screenshot demonstrating a successful API request executed through In
 
 ---
 
+## 🗄️ Database Architecture
+To understand how data flows through **The Easy Shop**, here is the Entity-Relationship Diagram (ERD) mapping our MySQL database schema. This structure highlights the relationships between users, their persistent shopping carts, and the product catalog tables:
+
+![Database Schema Diagram](easyshop-database-diagram.png)
+
+---
+
+## 📷 Application Screens
+
 ## 🚀 Technical Challenges & Highlights
 One of the most engaging and challenging milestones of this project was configuring the **Optional Phase 4: User Profile Pipeline** using Spring Security. Specifically, leveraging the `Principal` security interface layer allowed me to extract individual user credentials from bearer tokens safely so clients can view and modify their profile tables securely.
 
