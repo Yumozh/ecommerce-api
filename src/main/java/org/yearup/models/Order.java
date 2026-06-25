@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,7 +20,7 @@ public class Order {
     private int userId;
 
     @Column(name = "date")
-    private LocalDate date;
+    private LocalDateTime date;
 
     @Column(name = "address")
     private String address;
@@ -41,7 +42,7 @@ public class Order {
 
     public Order(){}
 
-    public Order(int orderId, int userId, LocalDate date, String address, String city, String state, String zip, BigDecimal shippingAmount) {
+    public Order(int orderId, int userId, LocalDateTime date, String address, String city, String state, String zip, BigDecimal shippingAmount) {
         this.orderId = orderId;
         this.userId = userId;
         this.date = date;
@@ -68,11 +69,11 @@ public class Order {
         this.userId = userId;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

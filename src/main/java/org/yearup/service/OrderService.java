@@ -1,12 +1,15 @@
 package org.yearup.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import org.yearup.models.*;
 import org.yearup.repository.OrderLineItemRepository;
 import org.yearup.repository.OrderRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 public class OrderService {
@@ -26,28 +29,21 @@ public class OrderService {
 
     public Order checkout (int userId){
         ShoppingCart currentCart = shoppingCartService.getByUserId(userId);
+        if (currentCart == null || currentCart.getItems() == null || currentCart.getItems().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cart is empty.");
+        }
+
         Profile profile = profileService.getProfileById(userId);
 
         Order order = new Order();
         order.setUserId(userId);
-        order.setDate(LocalDate.now());
+        order.setDate(LocalDateTime.now());
         order.setShippingAmount(BigDecimal.ZERO);
         order.setAddress(profile.getAddress());
         order.setCity(profile.getCity());
         order.setState(profile.getState());
         order.setZip(profile.getZip());
         Order savedOrder = orderRepository.save(order);
-
-//        Profile existing = profileRepository.findById(userId).orElseThrow();
-//        existing.setFirstName(profile.getFirstName());
-//        existing.setLastName(profile.getLastName());
-//        existing.setPhone(profile.getPhone());
-//        existing.setEmail(profile.getEmail());
-//        existing.setAddress(profile.getAddress());
-//        existing.setCity(profile.getCity());
-//        existing.setState(profile.getState());
-//        existing.setZip(profile.getZip());
-//        return profileRepository.save(existing);
 
         for (ShoppingCartItem cartItem : currentCart.getItems().values())
         {

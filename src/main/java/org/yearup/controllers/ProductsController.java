@@ -31,9 +31,6 @@ public class ProductsController
                                 @RequestParam(name="maxPrice", required = false) Double maxPrice,
                                 @RequestParam(name="subCategory", required = false) String subCategory)
     {
-//        if (categoryId == null && minPrice == null && maxPrice == null && subCategory == null) {
-//            return ResponseEntity.ok(productService.getAllProducts());
-//        }
 
         List<Product> filteredProducts = productService.search(categoryId, minPrice, maxPrice, subCategory);
         return ResponseEntity.ok(filteredProducts);
